@@ -13,9 +13,7 @@ A flask plugin to create a template render service
 
 Todo
 ----
-- add requirements.txt
 - pypi publishing
-- fix tox and travis
 
 Usage
 -----
