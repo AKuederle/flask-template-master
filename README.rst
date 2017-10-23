@@ -15,6 +15,13 @@ Todo
 ----
 - pypi publishing
 
+Notes
+-----
+- Need basic class view with discover_templates, pre, post
+- Need to support static and dynamic variables
+- github/gitlab?
+- example for latex
+
 Usage
 -----
 
