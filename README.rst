@@ -14,7 +14,6 @@ A flask plugin to create a template render service
 Todo
 ----
 - Add licence
-- configure test project
 - add requirements.txt
 - create travis CI
 - pypi publishing
