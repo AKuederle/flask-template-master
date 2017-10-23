@@ -17,7 +17,6 @@ Todo
 - add requirements.txt
 - create travis CI
 - pypi publishing
-- configure github
 
 Usage
 -----
