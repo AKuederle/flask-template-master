@@ -1,6 +1,8 @@
 import pytest
+from flask import Flask
 
-from test_project.app import create_app
+from jinja2 import Environment, DictLoader
+from flask_template_master import Api
 
 
 class TestConfig:
@@ -10,7 +12,8 @@ class TestConfig:
 @pytest.fixture
 def app():
     """An application for the tests."""
-    _app = create_app(TestConfig)
+    _app = Flask('test')
+    _app.config.from_object(TestConfig)
     ctx = _app.test_request_context()
     ctx.push()
 
@@ -26,3 +29,14 @@ def client(app):
     """
     with app.test_client() as client:
         yield client
+
+
+@pytest.fixture
+def api():
+    return Api()
+
+
+@pytest.fixture
+def default_environment():
+    templates = {'a': 'a:{{ a }}', 'b': 'b:{{ b }}, a:{{ a }}'}
+    return Environment(loader=DictLoader(templates)), templates
