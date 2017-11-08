@@ -4,36 +4,7 @@ import fnmatch
 from jinja2 import meta
 
 
-class _BaseTemplateListView(Resource):
-    ENVIRONMENT = None
-
-    def get(self):
-        """Return list of templates"""
-        match_filter = request.args.get('filter', default='*', type=str)
-        return {'templates': self.ENVIRONMENT.list_templates(filter_func=lambda x: fnmatch.fnmatch(x, match_filter))}
-
-
-class _BaseTemplateView(Resource):
-    ENVIRONMENT = None
-    GLOBALS = {}
-
-    def get(self, template_name):
-        """Return list of templates or details of a single template"""
-        source = str(self.ENVIRONMENT.loader.get_source(self.ENVIRONMENT, template_name)[0])
-        return {
-            'template_name': template_name,
-            'source': source,
-            'vars': list(meta.find_undeclared_variables(self.ENVIRONMENT.parse(source)))
-        }
-
-    def post(self, template_name):
-        """Post data to a template and return a rendered template."""
-        vars = request.get_json()['vars']
-        print(vars)
-        return self.ENVIRONMENT.get_template(template_name).render(**vars)
-
-
-class BaseTemplateView:
+class BaseTemplateView(Resource):
     """Base View To Provide Templates.
 
     Attributes:
@@ -41,17 +12,44 @@ class BaseTemplateView:
         ENVIRONMENT: A jinja2 Environment providing a template loader that supports list_templates
     """
     ENVIRONMENT = None
-    GLOBALS = {}
+    GLOBAL_PROVIDER = None
 
-    _TEMPLATE_LIST_VIEW = _BaseTemplateListView
-    _TEMPLATE_VIEW = _BaseTemplateView
+    def get(self, template_name=None):
+        """Return list of templates or details of a single template"""
+        if not template_name:
+            match_filter = request.args.get('filter', default='*', type=str)
+            return {'templates': self.ENVIRONMENT.list_templates(filter_func=lambda x: fnmatch.fnmatch(x, match_filter))}
+        source = str(self.ENVIRONMENT.loader.get_source(self.ENVIRONMENT, template_name)[0])
+        return_dict = {
+            'template_name': template_name,
+            'source': source,
+            'vars': list(meta.find_undeclared_variables(self.ENVIRONMENT.parse(source)))
+        }
+        if self.GLOBAL_PROVIDER:
+            return_dict['globals'] = self.GLOBAL_PROVIDER.get_globals()
+        return return_dict
+
+    def post(self, template_name):
+        """Post data to a template and return a rendered template."""
+        if request.is_json:
+            vars = request.get_json().get('vars', {})
+        else:
+            vars = {}
+        if self.GLOBAL_PROVIDER:
+            vars = {**self.GLOBAL_PROVIDER.get_globals(), **vars}
+        return self.ENVIRONMENT.get_template(template_name).render(**vars)
 
     @classmethod
     def add_as_resource(cls, api, base_route, argument=None):
         argument = argument or '<string:template_name>'
-        # Handle taht via __new__ or metaclass
-        cls._TEMPLATE_LIST_VIEW.ENVIRONMENT = cls.ENVIRONMENT
-        cls._TEMPLATE_VIEW.ENVIRONMENT = cls.ENVIRONMENT
-        cls._TEMPLATE_VIEW.GLOBALS = cls.GLOBALS
-        api.add_resource(cls._TEMPLATE_LIST_VIEW, base_route)
-        api.add_resource(cls._TEMPLATE_VIEW, base_route + argument)
+        api.add_resource(cls, base_route, base_route + argument)
+
+
+def create_template_endpoint(api, base_route, argument=None, environment=None, global_provider=None):
+    class_dict = {
+        'ENVIRONMENT': environment,
+        'GLOBAL_PROVIDER': global_provider
+    }
+    class_view = type(''.join(e for e in base_route if e.isalnum()), (BaseTemplateView, ), class_dict)
+    class_view.add_as_resource(api, base_route, argument)
+    return class_view
