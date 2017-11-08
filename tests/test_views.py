@@ -1,7 +1,7 @@
 import pytest
 from flask import json
 
-from views import create_template_endpoint
+from flask_template_master.views import create_template_endpoint
 
 
 class TestSimpleEndpoints:
