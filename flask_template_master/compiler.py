@@ -45,9 +45,14 @@ class SendFileCompiler(BaseCompiler):
 
 class LatexCompiler(SendFileCompiler):
     LATEX_COMMAND = 'pdflatex'
+    FILE_EXTENSION = 'pdf'
+
     _OUT_DIR = gettempdir()
     _TEMP_OUT_NAME = 'temp'
-    FILE_EXTENSION = 'pdf'
+
+    def __init__(self, file_extension=None, file_prefix=None, file_postfix=None, latex_command=None):
+        self.LATEX_COMMAND = latex_command or self.LATEX_COMMAND
+        super().__init__(file_extension=file_extension, file_prefix=file_prefix, file_postfix=file_postfix)
 
     def _create_file(self, template_name, document):
         tempfile = os.path.join(self._OUT_DIR, self._TEMP_OUT_NAME)
