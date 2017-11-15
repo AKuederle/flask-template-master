@@ -43,4 +43,3 @@ class TestSimpleEndpoints:
             response = client.get(self.endpoint + template)
             json_response = json.loads(response.get_data(as_text=True))
             assert json_response['source'] == source
-
