@@ -51,11 +51,9 @@ class LatexCompiler(SendFileCompiler):
 
     def _create_file(self, template_name, document):
         tempfile = os.path.join(self._OUT_DIR, self._TEMP_OUT_NAME)
-        print(tempfile)
         temp_tex = tempfile + '.tex'
         with open(temp_tex, 'wb') as f:
             f.write(document.encode('utf-8'))
         proc = subprocess.Popen([*self.LATEX_COMMAND.split(' '), temp_tex], cwd=self._OUT_DIR)
         proc.wait()
-        print(self.FILE_EXTENSION)
         return tempfile + '.' + self.FILE_EXTENSION
