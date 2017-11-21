@@ -2,3 +2,5 @@ flask
 flask_restful
 jinja2
 pytest
+pytest-cov
+tox

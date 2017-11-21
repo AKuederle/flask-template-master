@@ -1,3 +1,19 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+  - sudo docker --version
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - which docker-compose
+  - docker-compose --version
+
 env:
 - TOXENV=py35
 install:
@@ -5,4 +21,5 @@ install:
 language: python
 python: 3.5
 script:
-- tox -e ${TOXENV}
+- docker-compose -f docker/docker-compose.yml build
+- docker-compose -f docker/docker-compose.yml run flask-template-master tox -e ${TOXENV}

@@ -2,7 +2,10 @@ version: '2.1'
 services:
   flask-template-master:
     container_name: flask-template-master
-    image: flask-template-master
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: flask-template-master:latest
     volumes:
       - ./..:/opt/project
     ports:
