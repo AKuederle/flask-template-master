@@ -1,14 +1,10 @@
-FROM python:3.5
+FROM akuederle/docker-latex-python:latest
 
-EXPOSE  5000
-
-RUN apt-get update && apt-get install -y texlive-full
-RUN rm -rf /var/lib/apt/lists/*
-RUN pip install --upgrade pip
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt --upgrade
 
 ADD docker /docker
 
 WORKDIR /opt/project
+EXPOSE  5000
 ENTRYPOINT ["/docker/entrypoint.sh"]
