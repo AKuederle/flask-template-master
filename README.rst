@@ -9,7 +9,18 @@ flask-template-master
    :target: https://travis-ci.org/AKuederle/flask-template-master
    :alt: Latest Travis CI build status
 
-A flask plugin to create a template render service
+This is a little Python package, that allows you to run a small templating webserver in a handfull lines of code.
+This webserver can handle all your default email responses, create customized letter heads or even create dynamically generated PDFs.
+The idea is, you set up the server with access to all your template files and send it a set of variables.
+In return you will get you template text with all your variables included or even directly a beautifully rendered PDF file.
+The webserver is based on flask and flask-restfull and uses the jinja templating language.
+
+Features:
+
+- Support for multiple Template Loader and multiple endpoints
+- Integrate it seamlessly in bigger flask applications (this means you can handle your login and permission system)
+- Support for global variables, that can be accessed by all templates
+- Easy to extend by subclassing the provided models
 
 Todo
 ----
@@ -17,10 +28,7 @@ Todo
 
 Notes
 -----
-- Need basic class view with discover_templates, pre, post
-- Need to support static and dynamic variables
 - github/gitlab?
-- example for latex
 
 Usage
 -----
@@ -30,6 +38,7 @@ Installation
 
 Requirements
 ^^^^^^^^^^^^
+See requirements.txt for dev requirements and setup.py for prod requirements
 
 Compatibility
 -------------
