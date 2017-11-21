@@ -5,7 +5,7 @@ services:
 
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
   - sudo docker --version
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
@@ -16,10 +16,15 @@ before_install:
 
 env:
 - TOXENV=py35
+ - DOCKER_COMPOSE_VERSION=1.14
+
 install:
 - pip install -U tox
+
 language: python
+
 python: 3.5
+
 script:
 - docker-compose -f docker/docker-compose.yml build
 - docker-compose -f docker/docker-compose.yml run flask-template-master tox -e ${TOXENV}
