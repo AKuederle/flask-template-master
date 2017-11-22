@@ -11,11 +11,14 @@ setuptools.setup(
     description="A flask plugin to create a template render service",
     long_description=open('README.rst').read(),
 
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "test*"]),
 
-    install_requires=[],
+    install_requires=['flask', 'flask_restful', 'jinja2'],
+
+    license='LICENSE',
 
     classifiers=[
+        'Development Status :: 2 - Pre-Alpha',
         'Programming Language :: Python :: 3.5',
     ],
 )
