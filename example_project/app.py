@@ -10,8 +10,9 @@ def create_app(config_object=None):
     if config_object:
         app.config.from_object(config_object)
 
-    from test_project.views import api
-    app.register_blueprint(api)
-
+    from example_project.views import api
+    api.init_app(app)
 
     return app
+
+app = create_app()
