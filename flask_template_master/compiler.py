@@ -44,7 +44,7 @@ class SendFileCompiler(BaseCompiler):
 
 
 class LatexCompiler(SendFileCompiler):
-    LATEX_COMMAND = 'pdflatex'
+    LATEX_COMMAND = 'pdflatex -interaction=nonstopmode'
     FILE_EXTENSION = 'pdf'
 
     _OUT_DIR = gettempdir()
@@ -60,5 +60,7 @@ class LatexCompiler(SendFileCompiler):
         with open(temp_tex, 'wb') as f:
             f.write(document.encode('utf-8'))
         proc = subprocess.Popen([*self.LATEX_COMMAND.split(' '), temp_tex], cwd=self._OUT_DIR)
-        proc.wait()
+        return_code = proc.wait()
+        if return_code != 0:
+            raise SystemError()  # TODO: Make this a proper error
         return tempfile + '.' + self.FILE_EXTENSION
