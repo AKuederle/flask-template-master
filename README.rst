@@ -22,29 +22,42 @@ Features:
 - Support for global variables, that can be accessed by all templates
 - Easy to extend by subclassing the provided models
 
-Todo
-----
-- pypi publishing
+Roadmap 1.0 Release
+-------------------
+- Auto pypi publishing
+- Documentation
 
-Notes
------
-- github/gitlab?
+Longterm Roadmap
+----------------
+- Integrate new ways to Discover Templates (gitlab/github API)
+- Frontend to interactively fill the template data
+
 
 Usage
 -----
 
 Installation
 ------------
+.. code-block:: bash
+
+    pip install flask-template-master
+
+or if you want to develop an awesome new feature (yes, I know you want to!):
+
+.. code-block:: bash
+
+    git clone https://github.com/AKuederle/flask-template-master
+    cd flask-template-master
+    pip install -e .
+
 
 Requirements
 ^^^^^^^^^^^^
 See requirements.txt for dev requirements and setup.py for prod requirements
 
-Compatibility
--------------
-
 Licence
 -------
+`flask-template-master` is published under an MIT License.
 
 Authors
 -------
