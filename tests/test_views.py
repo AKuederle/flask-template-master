@@ -19,7 +19,7 @@ class TestSimpleEndpoints:
     def test_templates(self, client, default_environment):
         for template in default_environment[1].keys():
             response = client.get(self.endpoint + template)
-            assert response.status_code == 200, 'Index not reachable'
+            assert response.status_code == 200, 'Template endpoint not reachable'
 
     def test_index_returns_list_of_templates(self, client, default_environment):
         response = client.get(self.endpoint)
